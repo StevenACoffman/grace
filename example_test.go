@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-
 func ExampleWait_Wait() {
 	wait, _ := NewWait()
 	syscall.Kill(os.Getpid(), syscall.SIGTERM)
@@ -71,4 +70,3 @@ func ExampleWait_WaitWithTimeoutAndFuncErr() {
 	// Output: something bad happened: something went wrong
 	// Bye
 }
-

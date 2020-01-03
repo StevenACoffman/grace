@@ -68,11 +68,8 @@ func (w *Wait) WaitWithFunc(functions ...func() error) error {
 	for i := range functions {
 		w.g.Go(functions[i])
 	}
-	// wait for all errgroup goroutines
-	if err := w.g.Wait(); err != nil {
-		return err
-	}
-	return nil
+	// wait for all errgroup goroutines, return err or nil
+	return w.g.Wait()
 }
 
 // WaitWithTimeoutAndFunc call function, wait a given amount of time and then exit.
@@ -87,14 +84,11 @@ func (w *Wait) WaitWithTimeoutAndFunc(timeout time.Duration, functions ...func()
 		w.done()
 	})
 
-	// wait for all errgroup goroutines
-	if err := w.g.Wait(); err != nil {
-		return err
-	}
-	return nil
+	// wait for all errgroup goroutines, return err or nil
+	return w.g.Wait()
 }
 
-// listen - a simple function that listens to the signals channel for interruption signals and then call Done() of the errgroup.
+// listen - a simple function that listens to the signals channel for interruption signals and then call done() of the errgroup.
 func (w *Wait) listen(ctx context.Context) error {
 	signalChannel := getStopSignalsChannel()
 	select {

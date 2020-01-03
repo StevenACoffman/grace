@@ -41,7 +41,7 @@ func main() {
 				//return fmt.Errorf("test error ticker 2s")
 			case <-ctx.Done():
 				log.Printf("closing ticker 2s goroutine\n")
-				return ctx.Err()
+				return nil
 			}
 		}
 	})
@@ -81,7 +81,7 @@ func main() {
          				//return fmt.Errorf("test error ticker 2s")
          			case <-ctx.Done():
          				log.Printf("closing ticker 2s goroutine\n")
-         				return ctx.Err()
+         				return nil
          			}
          		}
 	})
@@ -122,14 +122,13 @@ func main() {
 			if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 				return err
 			}
-			return ctx.Err()
+			return nil
 		},
 		func() error { 
 			//cleanup: on interrupt, shutdown server
 			<-ctx.Done()
 			log.Printf("closing http goroutine\n")
-			httpServer.Shutdown(ctx)
-			return ctx.Err()
+			return httpServer.Shutdown(ctx)
 		})
 
 	if err != nil {
