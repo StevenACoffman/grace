@@ -30,7 +30,7 @@ import (
 
 func main() {
 
-	wait := grace.NewWait()
+	wait, ctx := grace.NewWait()
 
 	err := wait.WaitWithFunc(func() error {
 		ticker := time.NewTicker(2 * time.Second)
@@ -40,9 +40,9 @@ func main() {
 				log.Printf("ticker 2s ticked\n")
 				// testcase what happens if an error occured
 				//return fmt.Errorf("test error ticker 2s")
-			case <-wait.Done():
+			case <-ctx.Done():
 				log.Printf("closing ticker 2s goroutine\n")
-				return wait.Err()
+				return ctx.Err()
 			}
 		}
 	})
@@ -71,7 +71,7 @@ import (
 
 func main() {
 
-	wait := grace.NewWait()
+	wait, ctx := grace.NewWait()
 
 	err := wait.WaitWithTimeoutAndFunc(15*time.Second, func() error {
 		ticker := time.NewTicker(2 * time.Second)
@@ -81,9 +81,9 @@ func main() {
 				log.Printf("ticker 2s ticked\n")
 				// testcase what happens if an error occured
 				//return fmt.Errorf("test error ticker 2s")
-			case <-wait.Done():
+			case <-ctx.Done():
 				log.Printf("closing ticker 2s goroutine\n")
-				return wait.Err()
+				return ctx.Err()
 			}
 		}
 	})

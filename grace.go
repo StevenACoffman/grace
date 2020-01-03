@@ -27,36 +27,23 @@ func getStopSignalsChannel() chan os.Signal {
 
 // Wait struct represent wait functionality.
 type Wait struct {
-	g       *errgroup.Group
-	done    context.CancelFunc
-	gctx    *context.Context
-	signals *chan os.Signal
+	g    *errgroup.Group
+	done context.CancelFunc
 }
 
 // NewWait
-func NewWait() *Wait {
+func NewWait() (*Wait, context.Context) {
 	ctx, done := context.WithCancel(context.Background())
-	g, gctx := errgroup.WithContext(ctx)
-	signalChannel := getStopSignalsChannel()
+	g, ctx := errgroup.WithContext(ctx)
 	wait := &Wait{
-		g:       g,
-		done:    done,
-		signals: &signalChannel,
-		gctx:    &gctx,
+		g:    g,
+		done: done,
 	}
 	// goroutine to check for signals to gracefully finish all functions
-	wait.g.Go(wait.listen)
-	return wait
-}
-
-func (w *Wait) Done() <-chan struct{} {
-	gctx := *w.gctx
-	return gctx.Done()
-}
-
-func (w *Wait) Err() error {
-	gctx := *w.gctx
-	return gctx.Err()
+	wait.g.Go(func() error {
+		return wait.listen(ctx)
+	})
+	return wait, ctx
 }
 
 // Wait - simply wait for interruption.
@@ -103,15 +90,15 @@ func (w *Wait) WaitWithTimeoutAndFunc(timeout time.Duration, functions ...func()
 }
 
 // listen - a simple function that listens to the signals channel for interruption signals and then call Done() of the errgroup.
-func (w *Wait) listen() error {
+func (w *Wait) listen(ctx context.Context) error {
 	signalChannel := getStopSignalsChannel()
 	select {
 	case sig := <-signalChannel:
 		stdlog.Printf("Received signal: %s\n", sig)
 		w.done()
-	case <-w.Done():
+	case <-ctx.Done():
 		stdlog.Printf("closing signal goroutine\n")
-		return w.Err()
+		return ctx.Err()
 	}
 
 	return nil
