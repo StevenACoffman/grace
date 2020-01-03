@@ -156,3 +156,12 @@ func newHTTPServer() *http.Server {
 
 ```
 
+### Prior Art and Alternatives
+This uses errgroup, but I found a number of other libraries that use other mechanisms:
++ [death](https://github.com/vrecan/death) (sync.WaitGroup)
++ [graceful](https://github.com/TV4/graceful) (context cancellation)
++ [finish](https://github.com/pseidemann/finish/) (context + mutexes)
++ [waitabit](https://github.com/heartwilltell/waitabit) (sync.WaitGroup)
++ [Gist using errgroup](https://gist.github.com/pteich/c0bb58b0b7c8af7cc6a689dd0d3d26ef)
+
+Comparing them is pretty instructive. I wish I'd used some of their testing techniques!
