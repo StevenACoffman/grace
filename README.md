@@ -20,13 +20,11 @@ go get -u github.com/StevenACoffman/grace
 package main
 
 import (
-    "log"
-    "os"
-    "time"
+	"log"
+	"time"
 
-    "github.com/StevenACoffman/grace"
+	"github.com/StevenACoffman/grace"
 )
-
 
 func main() {
 
@@ -53,6 +51,7 @@ func main() {
 		log.Printf("received error: %v", err)
 	}
 }
+
 ```
 
 ##### Usage with a default timeout:
@@ -61,12 +60,11 @@ func main() {
 package main
 
 import (
-    "log"
-    "time"
+	"log"
+	"time"
 
-    "github.com/StevenACoffman/grace"
+	"github.com/StevenACoffman/grace"
 )
-
 
 func main() {
 
@@ -93,5 +91,6 @@ func main() {
 		log.Printf("received error: %v", err)
 	}
 }
+
 ```
 

@@ -31,8 +31,13 @@ type Wait struct {
 	done context.CancelFunc
 }
 
-// NewWait
+// NewWait - Create a graceful shutdown Wait
 func NewWait() (*Wait, context.Context) {
+	return NewWaitWithContext(context.Background())
+}
+
+// NewWaitWithContext -  Create a graceful shutdown Wait but provide context
+func NewWaitWithContext(context.Context) (*Wait, context.Context) {
 	ctx, done := context.WithCancel(context.Background())
 	g, ctx := errgroup.WithContext(ctx)
 	wait := &Wait{
