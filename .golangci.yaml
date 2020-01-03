@@ -1,0 +1,152 @@
+run:
+  concurrency: 4
+  deadline: 1m
+  issues-exit-code: 1
+  tests: false
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters:
+  disable:
+    - godox
+    - gochecknoglobals
+    - gochecknoinits
+    - lll
+    - misspell
+    - depguard
+    - maligned
+    - stylecheck
+    - gofmt
+  enable:
+    - govet
+    - goimports
+    - gocritic
+    - gosimple
+    - gocyclo
+    - goconst
+    - gosec
+    - errcheck
+    - staticcheck
+    - golint
+    - structcheck
+    - typecheck
+    - varcheck
+    - unused
+    - ineffassign
+    - deadcode
+    - unconvert
+    - interfacer
+    - funlen
+    - bodyclose
+    - whitespace
+    - scopelint
+    - prealloc
+    - nakedret
+    - dogsled
+    - unparam
+  fast: false
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  funlen:
+    lines: 60
+    statements: 40
+
+  golint:
+    # minimal confidence for issues, default is 0.8
+    min-confidence: 2
+
+  govet:
+    check-shadowing: false
+    # enable or disable analyzers by name
+    enable:
+      - atomicalign
+    enable-all: false
+    disable:
+      - shadow
+    disable-all: false
+
+  goimports:
+    local-prefixes: waitabit,github.com/heartwilltell
+
+  gocyclo:
+    min-complexity: 10
+
+  dupl:
+    threshold: 100
+
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+  unused:
+    check-exported: false
+
+  unparam:
+    check-exported: false
+
+  nakedret:
+    max-func-lines: 30
+
+  prealloc:
+    simple: true
+    range-loops: true
+    for-loops: false
+
+  gocritic:
+    # Which checks should be enabled; can't be combined with 'disabled-checks';
+    # See https://go-critic.github.io/overview#checks-overview
+    # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`
+    # By default list of stable checks is used.
+    enabled-checks:
+
+    # Which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
+    disabled-checks:
+      - regexpMust
+
+    settings: # settings passed to gocritic
+      captLocal: # must be valid enabled check name
+        paramsOnly: true
+
+  dogsled:
+    max-blank-identifiers: 2
+
+  whitespace:
+    multi-if: false
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    - path: internal/hmac/
+      text: "weak cryptographic primitive"
+      linters:
+        - gosec
+
+    - linters:
+        - gosec
+      text: "G104:"
+
+    - linters:
+        - staticcheck
+      text: "SA9003:"
+
+    - linters:
+        - lll
+      source: "^//go:generate "
+
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
