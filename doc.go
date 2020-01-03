@@ -1,19 +1,23 @@
-// Package Grace provides graceful shutdown made simple for zero to many goroutines
+// Package Grace provides graceful shutdown made simple for zero to many goroutines.
+//
 // Tiny library to gracefully shutdown your application by catching the OS signals using [`sync.errgroup`](https://godoc.org/golang.org/x/sync/errgroup).
 //
 // I often find I have invoked one or more persistent blocking methods, and some other method is needed be invoked in another goroutine to tell it to gracefully shut down when an interrupt is received.
 //
-// For instance, when [`ListenAndServe()`](https://golang.org/pkg/net/http/#ListenAndServe) is invoked, [`Shutdown`](https://godoc.org/net/http#Server.Shutdown) needs to be called.
+// For instance, when ListenAndServe() (https://golang.org/pkg/net/http/#ListenAndServe) is invoked, Shutdown (https://godoc.org/net/http#Server.Shutdown) needs to be called.
 //
 // This library allows you to start zero or more concurrent goroutines, and trigger a graceful shutdown when an interrupt is received.
 //
-// • Go `net/http` package offers [`Shutdown`](https://godoc.org/net/http#Server.Shutdown) function to gracefully shutdown your http server.
-// • Go `database/sql` package offers [`Close`](https://godoc.org/database/sql#DB.Close) function to gracefully close the connection to your SQL database.
-// • Google `google.golang.org/grpc` package offers [`Server.GracefulStop`](https://godoc.org/google.golang.org/grpc#Server.GracefulStop), stops accepting new connections, and blocks until all the pending RPCs are finished
+// • Go net/http package offers Shutdown (https://godoc.org/net/http#Server.Shutdown) function to gracefully shutdown your http server.
+//
+// • Go database/sql package offers Close(https://godoc.org/database/sql#DB.Close) function to gracefully close the connection to your SQL database.
+//
+// • Google google.golang.org/grpc package offers Server.GracefulStop` (https://godoc.org/google.golang.org/grpc#Server.GracefulStop), stops accepting new connections, and blocks until all the pending RPCs are finished
 //
 // Alternatively, this library allows you to invoke zero or more concurrent goroutines with an optional timeout.
 //
 // Example Usage with ListenAndServe and Shutdown
+//
 //  package main
 //
 //  import (
