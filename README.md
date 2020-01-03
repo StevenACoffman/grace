@@ -62,7 +62,6 @@ package main
 
 import (
     "log"
-    "os"
     "time"
 
     "github.com/StevenACoffman/grace"
