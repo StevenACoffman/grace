@@ -14,7 +14,7 @@ import (
 
 func getStopSignalsChannel() chan os.Signal {
 
-	signalChannel := make(chan os.Signal, 2)
+	signalChannel := make(chan os.Signal, 1)
 	signal.Notify(signalChannel,
 		os.Interrupt,    // interrupt is syscall.SIGINT, Ctrl+C
 		syscall.SIGQUIT, // Ctrl-\
